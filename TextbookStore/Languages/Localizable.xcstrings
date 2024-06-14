@@ -11,6 +11,9 @@
         }
       }
     },
+    "# of Books: " : {
+
+    },
     "%@" : {
       "localizations" : {
         "de" : {
@@ -41,6 +44,9 @@
         }
       }
     },
+    "1 day Ago" : {
+
+    },
     "Add" : {
       "localizations" : {
         "de" : {
@@ -51,7 +57,14 @@
         }
       }
     },
+    "Add a new book" : {
+
+    },
+    "Add another author" : {
+
+    },
     "Add new files" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -71,6 +84,12 @@
           }
         }
       }
+    },
+    "Author" : {
+
+    },
+    "Barcode" : {
+
     },
     "Book title" : {
       "localizations" : {
@@ -113,7 +132,14 @@
       }
     },
     "Choose a subject" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wählen Sie ein Thema"
+          }
+        }
+      }
     },
     "Choose File" : {
       "localizations" : {
@@ -124,6 +150,12 @@
           }
         }
       }
+    },
+    "Clear" : {
+
+    },
+    "Database Search" : {
+
     },
     "Description: " : {
       "localizations" : {
@@ -167,6 +199,7 @@
       }
     },
     "Enter Link" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -218,6 +251,7 @@
       }
     },
     "Import from URL" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -249,6 +283,7 @@
       }
     },
     "Name your File" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -267,6 +302,9 @@
           }
         }
       }
+    },
+    "Nothing Searched" : {
+
     },
     "Ok" : {
       "localizations" : {
@@ -289,6 +327,7 @@
       }
     },
     "OR" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -319,6 +358,19 @@
         }
       }
     },
+    "PDF" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF"
+          }
+        }
+      }
+    },
+    "Please provide access to the camera in the settings" : {
+
+    },
     "Rating" : {
       "localizations" : {
         "de" : {
@@ -328,6 +380,18 @@
           }
         }
       }
+    },
+    "Requesting camera access" : {
+
+    },
+    "Scan multiple" : {
+
+    },
+    "Scan Type" : {
+
+    },
+    "Scanner is available" : {
+
     },
     "Science" : {
       "extractionState" : "manual",
@@ -339,6 +403,9 @@
           }
         }
       }
+    },
+    "Search textbook, authors, people" : {
+
     },
     "Select an item" : {
       "localizations" : {
@@ -370,7 +437,17 @@
         }
       }
     },
+    "Text" : {
+
+    },
+    "Text content type" : {
+
+    },
+    "Textbook" : {
+
+    },
     "The file which you are uploading should be less than 2MB." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -390,8 +467,18 @@
         }
       }
     },
-    "Type to filter" : {
+    "Title" : {
 
+    },
+    "Type to filter" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Typ zum Filtern"
+          }
+        }
+      }
     },
     "Type to filter, or use # for tags" : {
       "extractionState" : "stale",
@@ -404,7 +491,11 @@
         }
       }
     },
+    "Unkown" : {
+
+    },
     "Upload" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -413,6 +504,21 @@
           }
         }
       }
+    },
+    "URL" : {
+
+    },
+    "URL:" : {
+
+    },
+    "View Book" : {
+
+    },
+    "Your device doesn't have a camera" : {
+
+    },
+    "Your devices doesnt have support for scanning textbooks with this app" : {
+
     }
   },
   "version" : "1.0"

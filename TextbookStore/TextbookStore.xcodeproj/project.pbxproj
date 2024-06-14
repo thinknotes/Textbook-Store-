@@ -10,6 +10,10 @@
 		971396E02C02A8810085ECE8 /* Tabbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971396DF2C02A8810085ECE8 /* Tabbar.swift */; };
 		971396E22C02AC160085ECE8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971396E12C02AC160085ECE8 /* Home.swift */; };
 		971396E42C02C0680085ECE8 /* Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971396E32C02C0680085ECE8 /* Add.swift */; };
+		9715D7E32C1B5DB900599C3E /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9715D7E22C1B5DB900599C3E /* CameraViewModel.swift */; };
+		9715D7E52C1BBCB300599C3E /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9715D7E42C1BBCB300599C3E /* Scanner.swift */; };
+		9715D7E72C1BBE0D00599C3E /* DataScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9715D7E62C1BBE0D00599C3E /* DataScannerView.swift */; };
+		97642F932C14F894009DB4FA /* CustomDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97642F922C14F894009DB4FA /* CustomDialog.swift */; };
 		978366AC2BFAC6D7006A93B0 /* TextbookStoreApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978366AB2BFAC6D7006A93B0 /* TextbookStoreApp.swift */; };
 		978366AE2BFAC6D7006A93B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978366AD2BFAC6D7006A93B0 /* ContentView.swift */; };
 		978366B02BFAC6D7006A93B0 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978366AF2BFAC6D7006A93B0 /* Item.swift */; };
@@ -23,6 +27,10 @@
 		971396DF2C02A8810085ECE8 /* Tabbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabbar.swift; sourceTree = "<group>"; };
 		971396E12C02AC160085ECE8 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		971396E32C02C0680085ECE8 /* Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Add.swift; path = "../New Group/Add.swift"; sourceTree = "<group>"; };
+		9715D7E22C1B5DB900599C3E /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		9715D7E42C1BBCB300599C3E /* Scanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
+		9715D7E62C1BBE0D00599C3E /* DataScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataScannerView.swift; sourceTree = "<group>"; };
+		97642F922C14F894009DB4FA /* CustomDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDialog.swift; sourceTree = "<group>"; };
 		978366A82BFAC6D7006A93B0 /* TextbookStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextbookStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		978366AB2BFAC6D7006A93B0 /* TextbookStoreApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextbookStoreApp.swift; sourceTree = "<group>"; };
 		978366AD2BFAC6D7006A93B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +52,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9715D7E12C1B5BA300599C3E /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				9715D7E22C1B5DB900599C3E /* CameraViewModel.swift */,
+				9715D7E42C1BBCB300599C3E /* Scanner.swift */,
+				9715D7E62C1BBE0D00599C3E /* DataScannerView.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
 		97642F8E2C13B316009DB4FA /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -71,9 +89,19 @@
 			path = Books;
 			sourceTree = "<group>";
 		};
+		97642F912C14F874009DB4FA /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				97642F922C14F894009DB4FA /* CustomDialog.swift */,
+			);
+			path = Alerts;
+			sourceTree = "<group>";
+		};
 		9783669F2BFAC6D7006A93B0 = {
 			isa = PBXGroup;
 			children = (
+				9715D7E12C1B5BA300599C3E /* Camera */,
+				97642F912C14F874009DB4FA /* Alerts */,
 				97642F902C13B34B009DB4FA /* Books */,
 				97642F8F2C13B334009DB4FA /* Tabbar */,
 				97642F8E2C13B316009DB4FA /* Views */,
@@ -189,12 +217,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				97642F932C14F894009DB4FA /* CustomDialog.swift in Sources */,
 				978366AE2BFAC6D7006A93B0 /* ContentView.swift in Sources */,
 				978366B02BFAC6D7006A93B0 /* Item.swift in Sources */,
+				9715D7E72C1BBE0D00599C3E /* DataScannerView.swift in Sources */,
 				971396E22C02AC160085ECE8 /* Home.swift in Sources */,
 				971396E42C02C0680085ECE8 /* Add.swift in Sources */,
+				9715D7E32C1B5DB900599C3E /* CameraViewModel.swift in Sources */,
 				971396E02C02A8810085ECE8 /* Tabbar.swift in Sources */,
 				97B37E912C0D323C0080318B /* PDFView.swift in Sources */,
+				9715D7E52C1BBCB300599C3E /* Scanner.swift in Sources */,
 				978366AC2BFAC6D7006A93B0 /* TextbookStoreApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,6 +369,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -366,6 +399,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

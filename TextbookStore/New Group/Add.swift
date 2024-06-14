@@ -12,118 +12,107 @@ struct Add: View {
     @State private var linkText: String = ""
     @State private var isLinkValid: Bool = false
     @State private var linkAlert: Bool = false
+    
+    @State private var authors = [String]()
+    
     var body: some View {
         
         ScrollView(.vertical) {
             VStack {
-                Text("Add new files")
+                Text("Add a new book")
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                 
                 
-                Text("The file which you are uploading should be less than 2MB.")
-                    .foregroundColor(.gray)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .font(.system(size: 13))
+              
                 
                 
                 VStack {
                     
-                    
-                    ZStack {
-            
+                    Section("Title") {
                         
-                        
-                        
-                        PDFView()
-                        
-                        RoundedRectangle(cornerRadius: 5)
-                            .fill(Color.clear)
-                            .frame(height: 100)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        TextField("Book title", text: $fileName)
                             .padding()
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .strokeBorder(style: StrokeStyle(lineWidth: 2, dash: [5, 5]))
-                                    .foregroundColor(.gray)
-                            )
-                            .padding()
-                        
-                        
-                        
-                        
+                            .textFieldStyle(.roundedBorder)
                     }
+                    .foregroundColor(.gray)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
                     
-                    Text("Name your File")
-                        .foregroundColor(.gray)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                    
-                    
-                    TextField("Book title", text: $fileName)
-                        .padding()
-                        .textFieldStyle(.roundedBorder)
-                    
-                    HStack {
-                        Rectangle()
-                            .frame(width: 30, height: 1)
-                            .foregroundColor(.gray)
+                    Section("URL") {
                         
-                        Text("OR")
-                            .foregroundColor(.gray)
-                        
-                        
-                        Rectangle()
-                            .frame(width: 30, height: 1)
-                            .foregroundColor(.gray)
-                        
-                        
-                        
-                    }
-                    
-                    Text("Import from URL")
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                    
-                    
-                    
-                    
-                    HStack {
-                        
-                        TextField("Enter Link", text: $linkText)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-                        
-                        Button(action: {
-                            verifyLink()
-                        }, label: {
-                            Text("Add")
+                        HStack {
+                            
+                            
+                            
+                            TextField("URL:", text: $linkText)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .padding()
-                                .foregroundColor(.primary)
-                        })
-                        .alert(isPresented: $linkAlert) {
-                            Alert(title: Text("Error"), message: Text("The link provided does not match required type: URL"), dismissButton: .default(Text("Ok")))
+                            
+                            Button(action: {
+                                verifyLink()
+                            }, label: {
+                                Text("Add")
+                                    .padding()
+                                    .foregroundColor(.primary)
+                            })
+                            .alert(isPresented: $linkAlert) {
+                                Alert(title: Text("Error"), message: Text("The link provided does not match required type: URL"), dismissButton: .default(Text("Ok")))
                                 
+                            }
+                            
+                            
+                            
+                            
+                            if isLinkValid {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.green)
+                                    .padding()
+                            } else {
+                                Image(systemName: "xmark")
+                                    .foregroundColor(.red)
+                                    .padding()
+                            }
+                            
                         }
-                      
-                        
-                        
-                        
-                        if isLinkValid {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.green)
-                                .padding()
-                        } else {
-                            Image(systemName: "xmark")
-                                .foregroundColor(.red)
-                                .padding()
-                        }
-                        
                     }
+                    .foregroundColor(.gray)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                 
+                    
+                    Section("Author") {
+                            
+                        ForEach(0..<authors.count, id: \.self) { index in
+                                             HStack {
+                                                 Button(action: { authors.remove(at: index) }) {
+                                                     Image(systemName: "minus.circle.fill")
+                                                         .foregroundColor(.red)
+                                                         .padding(.horizontal)
+                                                 }
+                                                 TextField("Author", text: getBinding(forIndex: index))
+                                             }
+                                         }
+                        
+                                         Button(action: { authors.append("") }) {
+                                             HStack {
+                                                 Image(systemName: "plus.circle.fill")
+                                                     .foregroundColor(.green)
+                                                     .padding(.horizontal)
+                                                 Text("Add another author")
+                                             }
+                                         }
+                                     
+                             
+                            
+                        }
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                        .padding(.vertical)
+                    
+                    
                     
                     Button(action: {
                         
@@ -155,7 +144,7 @@ struct Add: View {
                         Button(action: {
                             
                         }, label: {
-                            Text("Upload")
+                            Text("Add")
                                 .foregroundColor(.primary)
                                 .frame(width: 150, height: 50)
                             
@@ -168,7 +157,7 @@ struct Add: View {
             }
         }
         .background(
-            LinearGradient(colors: [Color("Lavender"), Color("Powder blue")], startPoint: .top, endPoint: .bottom)
+            LinearGradient(colors: [Color("Aquamarine").opacity(0.75), Color("Ocean").opacity(0.75)], startPoint: .top, endPoint: .bottom)
         )
     }
     
@@ -196,6 +185,11 @@ struct Add: View {
                isLinkValid = false
            }
        }
+    
+    func getBinding(forIndex index: Int) -> Binding<String> {
+            return Binding<String>(get: { authors[index] },
+                                   set: { authors[index] = $0 })
+        }
 }
 
 #Preview("English") {

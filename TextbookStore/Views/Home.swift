@@ -10,7 +10,7 @@ import SwiftUI
 struct Home: View {
     
     
-    @State private var selectedTab: Tab = .house
+    @State private var selectedTab: Tabs = .house
     
     init() {
         UITabBar.appearance().isHidden = true
@@ -18,32 +18,68 @@ struct Home: View {
     var body: some View {
         
         ZStack {
-            VStack {
-                TabView(selection: $selectedTab) {
-                    ForEach(Tab.allCases, id: \.rawValue) { tab in
-                        HStack {
-                            switch selectedTab {
-                            case .house:
-                                HomePage()
-                            case .book:
-                                ContentView()
-                                  
-                            case .plus:
-                              Add()
-                            case .dollarsign:
-                                Text("")
+            
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                
+                
+                VStack {
+                    TabView(selection: $selectedTab) {
+                        ForEach(Tabs.allCases, id: \.rawValue) { tab in
+                            HStack {
+                                switch selectedTab {
+                                case .house:
+                                    HomePage()
+                                case .book:
+                                    ContentView()
+                                    
+                                case .plus:
+                                    Add()
+                                case .dollarsign:
+                                    Text("")
+                                }
                             }
+                            .tag(tab)
                         }
-                        .tag(tab)
                     }
+                }
+            } else if UIDevice.current.userInterfaceIdiom == .pad {
+                VStack {
+                    TabView(selection: $selectedTab) {
+                        
+                        ForEach(Tabs.allCases, id: \.rawValue) { tab in
+                            HStack {
+                                
+                                switch selectedTab {
+                                case .house:
+                                    HomePage()
+                                case .book:
+                                    ContentView()
+                                    
+                                case .plus:
+                                    Add()
+                                case .dollarsign:
+                                    Text("")
+                                }
+                            }
+                            .tag(tab)
+                        }
+                    }
+//                    Text("This is an iPad, and it's running iPadOS!")
+                    
                 }
             }
             
+            
+           
             VStack {
                 Spacer()
                 Tabbar(selectedTab: $selectedTab)
             }
+            
+            
         }
+        
+
 
     }
 }
@@ -79,8 +115,114 @@ struct HomePage: View {
     
     @State  var selectedSubject = ""
     
+    //Ipad Var
+    
+    @State var quickLink: Bool = false
+    
     var body: some View {
-        NavigationView {
+        
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            NavigationView {
+                VStack {
+                    VStack {
+                        Text("Hi, Student!")
+                            .foregroundColor(.primary)
+                            .bold()
+                            .font(.title)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
+                        Text("Find your next textbook here")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundColor(.gray)
+                    }
+                    .padding()
+                    
+                    
+                    VStack {
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(subjects, id: \.self) { sub in
+                                    
+                                    Button(action: {
+                                        quickLink.toggle()
+                                    }, label: {
+                                        Text(sub)
+                                           .padding()
+                                           .foregroundColor(.primary)
+                                    })
+                                    .background(.ultraThickMaterial)
+                                    .cornerRadius(15)
+                                    
+//                                    NavigationLink(destination: {
+//                                        ContentView()
+//                                    }, label: {
+//                                        Text(sub)
+//                                            .padding()
+//                                            .foregroundColor(.primary)
+//                                    })
+//                                    
+//                                    .background(.ultraThickMaterial)
+//                                    .cornerRadius(15)
+                                }
+                                .sheet(isPresented: $quickLink, content: {
+                                    ContentView()
+                                })
+                            }
+                        }
+                    }
+                    .padding()
+                    
+                    
+                    ScrollView(.vertical) {
+                        
+                        ForEach(subjects, id: \.self) { subject in
+                            Text("\(subject) Textbooks")
+                                .foregroundColor(.primary)
+                                .bold()
+                                .padding()
+                                .font(.title3)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            ScrollView(.horizontal) {
+                                ForEach(books) { book in
+                                    if book.subject == subject {
+                                        Image(systemName: "book.pages.fill")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 100, height: 100)
+                                        
+                                        Text("\(book.title)")
+                                            .padding()
+                                            .foregroundColor(.primary)
+                                            .bold()
+                                        
+                                        ForEach(book.authors, id: \.self) { author in
+                                            Text("By \(author)")
+                                                .foregroundColor(.primary)
+                                                .offset(y: -15)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        Text("Opps it looks like you reach the end.")
+                            .foregroundColor(.white)
+                            .bold()
+                        Text("Dont worry we  have \(books.count) books... and counting!")
+                            .foregroundColor(.gray)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Spacer()
+                }
+                .background(
+                    LinearGradient(colors: [Color("Aquamarine").opacity(0.75), Color("Ocean").opacity(0.75)], startPoint: .top, endPoint: .bottom)
+                )
+            }
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            
             VStack {
                 VStack {
                     Text("Hi, Student!")
@@ -88,7 +230,7 @@ struct HomePage: View {
                         .bold()
                         .font(.title)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                   
+                    
                     
                     Text("Find your next textbook here")
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -108,7 +250,7 @@ struct HomePage: View {
                                         .padding()
                                         .foregroundColor(.primary)
                                 })
-                               
+                                
                                 .background(.ultraThickMaterial)
                                 .cornerRadius(15)
                             }
@@ -161,9 +303,13 @@ struct HomePage: View {
                 Spacer()
             }
             .background(
-                LinearGradient(colors: [Color("Lavender"), Color("Powder blue")], startPoint: .top, endPoint: .bottom)
+                LinearGradient(colors: [Color("Aquamarine").opacity(0.75), Color("Ocean").opacity(0.75)], startPoint: .top, endPoint: .bottom)
             )
+            
+                
+            
         }
+        
     
     }
 }
@@ -177,3 +323,5 @@ struct HomePage: View {
     HomePage()
         .environment(\.locale, Locale(identifier: "DE"))
 }
+
+
