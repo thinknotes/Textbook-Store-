@@ -40,23 +40,36 @@ struct Item: Identifiable, LocalizedStringResource {
 
 //Search Token Code:
 
-final class Book: Identifiable {
+struct Book: Identifiable, Codable {
     var id = UUID()
     var title: String
     var subject: String
     var authors: [String]
     var pdf: String
-    var image: Image
+    // var image: Image  // Remove this property from Codable
     
-    init(id: UUID = UUID(), title: String, subject: String, authors: [String], pdf: String, image: Image) {
+    // Use a URL or String for image reference instead
+    var imageURL: String
+    
+    // CodingKeys enum to customize encoding/decoding
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case subject
+        case authors
+        case pdf
+        case imageURL = "image_url"  // Map imageURL to "image_url" in JSON
+    }
+    
+    // Initializer to set all properties
+    init(id: UUID = UUID(), title: String, subject: String, authors: [String], pdf: String, imageURL: String) {
         self.id = id
         self.title = title
         self.subject = subject
         self.authors = authors
         self.pdf = pdf
-        self.image = image
+        self.imageURL = imageURL
     }
-    
 }
 
 struct Token: Identifiable {

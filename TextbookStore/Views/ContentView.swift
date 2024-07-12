@@ -7,9 +7,18 @@
 
 import SwiftUI
 import SwiftData
+import SwiftyJSON
+import SDWebImageSwiftUI
+import WebKit
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    
+    //Google Books Api
+    
+    @ObservedObject var googlebooks = getDataFromGoogle()
+    @State var url: String = ""
+    @State var show: Bool = false
 //    @Query private var items: [Item]
     
     @State var search: String = ""
@@ -18,7 +27,7 @@ struct ContentView: View {
     
     let allSubjets = [
         
-         "All",
+         "Select a Subject",
          "Math",
          "Science",
          "English",
@@ -30,15 +39,9 @@ struct ContentView: View {
     
     
     
-    @State var selectedSubject = "All"
+    @State var selectedSubject = "Select a Subject"
     
-    let books = [
-        Book(title: "Prinplces of enginer", subject: "Math", authors: ["Sam GoodsBugr"], pdf: "", image: Image(systemName: "book.pages.fill")),
-        Book(title: "History of the world", subject: "History", authors: ["Leonard Lee"], pdf: "", image: Image(systemName: "book.pages.fill")),
-        Book(title: "Spainsh 101", subject: "Other", authors: ["Maria Gonzulezs"], pdf: "", image: Image(systemName: "book.pages.fill"))
-    
-    ]
-    
+  
     @State private var currentTokens = [Token]()
     
     
@@ -63,6 +66,9 @@ struct ContentView: View {
     
     @State private var viewBook: Bool = false
     
+    @Environment(\.openURL) var openURL
+    
+    @State private var noResultsFound = false
     
     
     var searchResults: [Book] {
@@ -76,7 +82,7 @@ struct ContentView: View {
                         return false
                     }
                 }
-                if book.subject != selectedSubject && selectedSubject != "All"{
+                if book.subject != selectedSubject && selectedSubject != "Select a Subject"{
                     return false
                 }
                 
@@ -91,56 +97,96 @@ struct ContentView: View {
         
         if UIDevice.current.userInterfaceIdiom == .phone {
             NavigationSplitView {
-                HStack {
-                    Text("Database Search")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .bold()
+                VStack(spacing: 12) {
                     
-                    Text("# of Books: ")
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack {
+                        Text("Database Search")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                            .bold()
+                            .font(.title2)
+                        
+                        Text("\(googlebooks.numberOfBooksAvailable())  Books Available ")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .padding()
+                            .font(.caption)
+                            .padding(.horizontal)
+                    }
+                    
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .font(.title3)
+                        
+                        
+                        TextField("Search textbooks, authors, subject", text: $search, onCommit: {
+                            // Perform search action when return key is pressed
+                            fetchData(query: search)
+                            noResultsFound = false
+                        })
                         .padding()
-                        .font(.caption)
+                        
+                        //                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                        
+                    }
+                    .padding(.horizontal)
+//                    .frame(height: 45)
+                    .background {
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(.background)
+                    }
+                    .padding(.horizontal)
                 }
-                List {
-                    ForEach(searchResults) { item in
-                        NavigationLink {
-                            VStack {
-                                HStack {
-                                    Button(action: {
-                                        
-                                    }, label: {
-                                        Image(systemName: "bookmark")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 30, height: 30)
-                                            .foregroundColor(.gray)
-                                            .offset(y: 60)
-                                        
-                                    })
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    
-                                    Spacer()
-                                    
-                                }
-                                
-                                Spacer()
-                                
+//                .background(.gray.opacity(0.15))
+                .background(
+                    LinearGradient(colors: [Color("Aquamarine").opacity(0.75), Color("Ocean").opacity(0.75)], startPoint: .top, endPoint: .bottom)
+                )
+
+//                .padding(.horizontal)
+               
+                
+              
+                
+                if noResultsFound {
+                    
+                    ContentUnavailableView.search(text: "\(search)")
+                        .background(
+                            LinearGradient(colors: [Color("Aquamarine").opacity(0.75), Color("Ocean").opacity(0.75)], startPoint: .top, endPoint: .bottom)
+                        )
+                        
+
+                } else {
+                    
+                    List(googlebooks.data) { item in
+                        
+                        NavigationLink(destination: {
+                            ScrollView(.vertical) {
                                 VStack {
                                     VStack {
-                                        Image(systemName: "book.pages.fill")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 200, height: 300)
-                                        //                                        .border(.primary)
-                                            .padding()
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .offset(y: 60)
-                                            .blur(radius: isActive ? 20 : 0)
+                                        
+                                        
+                                        if item.imurl != "" {
+                                            WebImage(url: URL(string: item.imurl)!).resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 200, height: 300)
+                                                .padding()
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .offset(y: 60)
+                                                .blur(radius: isActive ? 20 : 0)
+                                        } else {
+                                            Image(systemName: "book.pages.fill")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 200, height: 300)
+                                                .padding()
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .offset(y: 60)
+                                                .blur(radius: isActive ? 20 : 0)
+                                        }
+                                        
                                         
                                         VStack {
                                             VStack {
-                                                Text("\(bookPages)")
+                                                Text("\(item.page)")
                                                     .bold()
                                                 
                                                 Text("Pages")
@@ -150,8 +196,10 @@ struct ContentView: View {
                                             .padding()
                                             
                                             VStack {
-                                                Text("\(bookLangauge)")
+                                                Text("\(item.language)")
                                                     .bold()
+                                                    .textCase(.uppercase)
+                                                    
                                                 
                                                 Text("Langauge")
                                                     .foregroundColor(.gray)
@@ -163,7 +211,6 @@ struct ContentView: View {
                                             VStack {
                                                 Text("\(item.subject)")
                                                     .bold()
-                                                //                                                .foregroundColor(.yellow)
                                                 
                                                 Text("Subject")
                                                     .foregroundColor(.gray)
@@ -173,11 +220,11 @@ struct ContentView: View {
                                             
                                             
                                             VStack {
-                                                Text("\(bookRating.formatted())")
+                                                Text("\(item.date)")
                                                     .bold()
-                                                    .foregroundColor(.yellow)
                                                 
-                                                Text("Rating")
+                                                
+                                                Text("Date Published")
                                                     .foregroundColor(.gray)
                                                     .font(.headline)
                                             }
@@ -193,149 +240,153 @@ struct ContentView: View {
                                         
                                         
                                     }
-                                }
-                                
-                                VStack {
-                                    Text("\(item.title)")
-                                        .bold()
-                                        .font(.title)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .blur(radius: isActive ? 20 : 0)
-                                    //                                    .padding()
-                                    
-                                    ForEach(item.authors, id: \.self) { authors in
-                                        Text("By: \(authors)")
-                                            .foregroundColor(.gray)
-                                        //                                        .padding()
-                                        
-                                    }
-                                    .blur(radius: isActive ? 20 : 0)
-                                    
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    //                                .padding()
-                                    
-                                    Text("Description: ")
-                                        .foregroundColor(.primary)
-                                        .bold()
-                                        .offset(y: 20)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .blur(radius: isActive ? 20 : 0)
-                                    
-                                    
-                                    if bookDesc.isEmpty {
-                                        Text("No decription could be found")
-                                            .padding()
-                                            .blur(radius: isActive ? 20 : 0)
-                                    }
-                                    
-                                    
-                                    if isActive {
-                                        CustomDialog(isActive: $isActive, title: "Are you sure?", message: "By agreeing to download, you waive your rights and know you may be breaking the law", buttonTitle1: "I Understand", buttonTitle2: "Go Back To Safety", action: {}, action1: {})
-                                            .offset(y: -200)
-                                    }
-                                    
-                                    
-                                    //                                    .offset(y: 20)
-                                    
-                                    
-                                    Button(action: {
-                                        isActive = true
-                                    }, label: {
-                                        Text("Download \(item.title)")
-                                    })
-                                    .buttonStyle(BorderedButtonStyle())
-                                    .blur(radius: isActive ? 20 : 0)
-                                    //
-                                    
-                                    
-                                    
-                                    
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding()
-                                .offset(y: -250)
-                                //                            .offset(y: isActive ? -250 : 0)
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                Spacer()
-                            }
-                           
-                            .background(
-                                LinearGradient(colors: [Color("Aquamarine").opacity(0.75), Color("Ocean").opacity(0.75)], startPoint: .top, endPoint: .bottom)
-                            )
-                            
-                            
-                        } label: {
-                            VStack {
-                                HStack {
-                                    Image(systemName: "book.pages.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 40, height: 40)
-                                        .background(.gray)
-                                        .clipShape(Circle())
-                                  
-                                    
-                                    
-                                    
                                     
                                     VStack {
                                         Text("\(item.title)")
                                             .bold()
-                                            .font(.headline)
+                                            .font(.title)
                                             .frame(maxWidth: .infinity, alignment: .leading)
+                                            .blur(radius: isActive ? 20 : 0)
+                                        //                                    .padding()
                                         
-                                        ForEach(item.authors, id: \.self) { authors in
-                                            Text("By: \(authors)")
-                                                .foregroundColor(.gray)
-                                                .font(.caption)
-                                            //                                        .padding()
-                                            
+                                        
+                                        Text("By: \(item.authors)")
+                                            .foregroundColor(.gray)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        //                                .padding()
+                                        
+                                        Text("Description: ")
+                                            .foregroundColor(.primary)
+                                            .bold()
+                                            .offset(y: 20)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .blur(radius: isActive ? 20 : 0)
+                                        
+                                        
+                                        Text("\(item.desc)")
+                                            .foregroundColor(.primary)
+                                            .offset(y: 20)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .blur(radius: isActive ? 20 : 0)
+                                        
+                                        if item.desc.isEmpty {
+                                            Text("No decription could be found")
+                                                .padding()
+                                                .blur(radius: isActive ? 20 : 0)
+                                        }
+                                        
+                                        
+                                        Text("Options")
+                                            .foregroundColor(.primary)
+                                            .bold()
+                                            .offset(y: 40)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding()
+                                            .padding(.vertical)
+                                        
+                                        
+                                        Grid(horizontalSpacing: 16, verticalSpacing: 16) {
+                                            GridRow {
+                                                Image("Google Logo")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 40, height: 40)
+                                                    .font(.title)
+                                                    .foregroundColor(.white)
+                                                    
+                                                
+                                                Spacer()
+                                                
+                                                VStack(alignment: .leading, spacing: 8) {
+                                                    Text("Google Books")
+                                                        .font(.headline)
+                                                    
+                                                
+                                                 
+                                                    
+//                                                    Link("View in webpage", destination: URL(string: "\(item.url)"))
+                                                    
+                                                    Button(action: {
+                                                        if let url = URL(string: "\(item.url)") {
+                                                            openURL(url)
+                                                        } else {
+                                                            print("DEBUG: Invalid URL")
+                                                        }
+                                                    }, label: {
+                                                        Text("View in webpage")
+                                                            .foregroundColor(.blue)
+                                                    })
+                                                    
+                                                }
+                                            }
                                         }
                                         .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding()
                                         
-                                        
-                                        
-                                        
-                                        
-                                        
+                                        Grid(horizontalSpacing: 16, verticalSpacing: 16) {
+                                            GridRow {
+                                                Image(systemName: "plus")
+                                                    .font(.title)
+                                                    .foregroundColor(.white)
+                                                
+                                                Spacer()
+                                                
+                                                VStack(alignment: .leading, spacing: 8) {
+                                                    Text("Amazon")
+                                                        .font(.headline)
+                                                    
+                                                
+                                                    
+                                                    Button(action: {
+                                                        
+                                                    }, label: {
+                                                        Text("View in webpage")
+                                                            .foregroundColor(.blue)
+                                                    })
+                                                    
+                                                }
+                                            }
+                                        }
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding()
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    
-                                    
+                                    .padding()
+                                    .offset(y: -250)
+                                    //
                                     
                                 }
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                //
+                            }
+                            
+                            
+                        }, label: {
+                            HStack {
+                                
+                                if item.imurl != "" {
+                                    WebImage(url: URL(string: item.imurl)!).resizable().frame(width: 120, height: 170).cornerRadius(10)
+                                } else {
+                                    Image(systemName: "book.pages.fill")
+                                        .resizable()
+                                        .frame(width: 120, height: 170)
+                                        .cornerRadius(10)
+                                }
                                 
                                 
-                                HStack {
-                                    Text("\(item.subject)")
-                                        .frame(width: 60, height: 20)
-                                        .frame(alignment: .leading)
-                                        .bold()
+                                VStack(alignment: .leading, spacing: 10) {
+                                    
+                                    Text(item.title)
+                                        .fontWeight(.bold)
+                                    
+                                    Text(item.authors)
+                                    
+                                    Text(item.desc)
                                         .font(.caption)
-                                        .background(Capsule()
-                                            .fill(Color.blue))
+                                        .lineLimit(4)
+                                        .multilineTextAlignment(.leading)
                                     
-                                    
-                                    Text("PDF")
-                                        .frame(width: 60, height: 20)
-                                        .frame(alignment: .leading)
-                                        .bold()
-                                        .font(.caption)
-                                        .background(Capsule()
-                                            .fill(Color.green))
-                                    
-                                    Spacer()
-                                    
-                                    
-                                    Text("1 day Ago")
+                                    Text(item.date)
                                         .foregroundColor(.gray)
                                         .frame(width: 80, height: 20)
                                         .frame(alignment: .leading)
@@ -343,70 +394,41 @@ struct ContentView: View {
                                         .font(.caption)
                                         .background(Capsule()
                                             .fill(Color.white))
-                                    
-                                }
-                                .offset(y: 20)
-                             
-                                
-                                
-                            }
-                            .frame(height: 100)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-//                        .background(
-//                            LinearGradient(colors: [Color("Aquamarine").opacity(0.75), Color("Ocean").opacity(0.75)], startPoint: .top, endPoint: .bottom)
-//                        )
-                        
-                        
-                    }
-                
-                   
-                  
-                    
-                    
-                    
-                    
-                    
-                }
-                
-                
-                
-                
-                
-                .toolbar {
-                    
-                    ToolbarItem {
-                        HStack {
-                            Picker("Choose a subject", selection: $selectedSubject) {
-                                ForEach(allSubjets, id: \.self) { subject in
-                                    Text("\(subject)")
-                                    
                                 }
                             }
                             
-                            Button(action: {
-                                
-                            }, label: {
-                                Image(systemName: "slider.horizontal.3")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20, height: 20)
-                            })
-                            
-                        }
+                            //                        .onTapGesture {
+                            //                            self.url = item.url
+                            //                            self.show.toggle()
+                            //                        }
+                            //
+                        })
+                        
+                        
+                        
+                        
                         
                         
                         
                     }
-                    
+                    .background(
+                        LinearGradient(colors: [Color("Aquamarine").opacity(0.75), Color("Ocean").opacity(0.75)], startPoint: .top, endPoint: .bottom)
+                    )
+
+                    .onAppear {
+                        //                    fetchData(query: "math")
+                        
+                        if search.isEmpty {
+                            noResultsFound = true
+                        }
+                       
+                    }
                 }
                 
-                .searchable(text: $search, tokens: $currentTokens, prompt: Text("Type to filter")) { token in
-                    Text(token.title)
-                    
-                }
-                
-            } detail: {
+
+            }
+            
+        detail: {
                 Text("Select an item")
             }
         } else if UIDevice.current.userInterfaceIdiom == .pad {
@@ -427,14 +449,22 @@ struct ContentView: View {
                             .frame(width: 40, height: 40)
                         
                         
-                 
+                        TextField("Search textbooks, authors, subject", text: $searchbar, onCommit: {
+                            // Perform search action when return key is pressed
+                            fetchData(query: searchbar)
+                        })
+                        .onChange(of: searchbar) { searchText in
+                                                          isExpanable = true
+                                                          isClear = true
+                        }
+                        .padding()
                         
-                        TextField("Search textbook, authors, people", text: $searchbar)
-                            .foregroundColor(.primary)
-                            .onChange(of: searchbar) { searchText in
-                                    isExpanable = true
-                                    isClear = true
-                                }
+//                        TextField("Search textbook, authors, people", text: $searchbar)
+//                            .foregroundColor(.primary)
+//                            .onChange(of: searchbar) { searchText in
+//                                    isExpanable = true
+//                                    isClear = true
+//                                }
                            
 //                            .onAppear {
 //                                if searchbar.contains(searchbar) {
@@ -545,13 +575,31 @@ struct ContentView: View {
                                 .bold()
                                 .offset(x: -300, y: 30)
                         } else {
-                            ForEach(searchResults) { item in
+                            List(googlebooks.data) { item in
                                 HStack {
-                                    Image(systemName: "book.pages.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 40, height: 40)
-                                        .foregroundColor(.black)
+                                    if item.imurl != "" {
+                                        WebImage(url: URL(string: item.imurl)!).resizable()
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.black)
+                                        
+//                                            .aspectRatio(contentMode: .fit)
+//                                            .frame(width: 200, height: 300)
+//                                            .padding()
+//                                            .frame(maxWidth: .infinity, alignment: .leading)
+//                                            .offset(y: 60)
+//                                            .blur(radius: isActive ? 20 : 0)
+                                    } else {
+                                        Image(systemName: "book.pages.fill")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.black)
+                                    }
+                                    
+                                    
+                               
                                     
                                     
                                     
@@ -563,14 +611,20 @@ struct ContentView: View {
                                             .foregroundColor(.black)
                                         //                                        .padding()
                                         
-                                        ForEach(item.authors, id: \.self) { authors in
-                                            Text("By: \(authors)")
+                                        
+                                        
+//                                        Text("By: \(item.authors)")
+//                                                .foregroundColor(.gray)
+//                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                       
+                                        Text("By: \(item.authors)")
                                                 .foregroundColor(.gray)
                                                 .font(.caption)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
                                             //                                        .padding()
                                             
-                                        }
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        
+                                       
                                         
                                         
                                         
@@ -586,7 +640,7 @@ struct ContentView: View {
                                                 .frame(width: 20, height: 20)
                                                 .foregroundColor(.black)
                                         })
-                                        .offset(x: -180)
+//                                        .offset(x: -180)
                                         
                                         Button(action: {
                                             viewBook.toggle()
@@ -607,6 +661,7 @@ struct ContentView: View {
                                         
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                    .border(Color.red)
                                     .sheet(isPresented: $viewBook, content: {
                                         VStack {
 //                                            HStack {
@@ -729,14 +784,10 @@ struct ContentView: View {
                                                                     .offset(y: -300)
                                                                 //                                    .padding()
                                                                 
-                                                                ForEach(item.authors, id: \.self) { authors in
-                                                                    Text("By: \(authors)")
-                                                                        .foregroundColor(.gray)
-                                                                    //                                        .padding()
-                                                                    
-                                                                }
-                                                                .blur(radius: isActive ? 20 : 0)
-                                                                .offset(y: -300)
+                                                               
+                                                                Text("By: \(item.authors)")
+                                                                        .foregroundColor(.gray).blur(radius: isActive ? 20 : 0)
+                                                                       .offset(y: -300)
                                                                 
                                                                 
                                                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -764,16 +815,11 @@ struct ContentView: View {
                                                                 }
                                                                 
                                                                 
-                                                                //                                    .offset(y: 20)
+                                                                //                                    .offset(y: 20)w
                                                                 
                                                                 VStack {
-                                                                    Button(action: {
-                                                                        isActive = true
-                                                                    }, label: {
-                                                                        Text("Download \(item.title)")
-                                                                    })
-                                                                    .buttonStyle(BorderedButtonStyle())
-                                                                    .blur(radius: isActive ? 20 : 0)
+//                                                                    Link("Open \(item.title)", destination: URL(string: "\(item.pdf)")!)
+//                                                                    .blur(radius: isActive ? 20 : 0)
                                                                     //
                                                                     
                                                                     Button(action: {
@@ -823,10 +869,14 @@ struct ContentView: View {
                                 }
                                 //                            ./*padding()*/
                             }
+                            .onAppear {
+                                fetchData(query: "math")
+                            }
                         }
                     }
 //                    .padding(.horizontal)
-                    .offset(x: 250,y: -590)
+                    .offset(x: 150,y: -650)
+                    .border(.red)
                     
                 }
                 
@@ -840,6 +890,18 @@ struct ContentView: View {
         }
           
         
+    }
+    
+    private func fetchData(query: String) {
+        googlebooks.data.removeAll()
+        googlebooks.fetchData(query: query) { sucess in
+            if !sucess {
+                       print("No books found for the query: \(query)")
+            } else {
+                       print("Books successfully fetched.")
+        }
+            
+        }
     }
      
     
@@ -856,19 +918,143 @@ struct ContentView: View {
         case "History":
             return Color.purple
         case "Other":
-            return Color.gray
+            return Color.yellow
         default:
             return Color.black
         }
     }
     
 
+    class getDataFromGoogle: ObservableObject {
+        @Published var data = [GoogleBook]()
+        
+        func fetchData(query: String, completion:  @escaping (Bool) -> Void){
+            let formattedQuery = query.replacingOccurrences(of: " ", with: "+")
+            let url = "https://www.googleapis.com/books/v1/volumes?q=\(formattedQuery)"
+            
+            let session = URLSession(configuration: .default)
+            
+            session.dataTask(with: URL(string: url)!) { (data, _, err) in
+                if err != nil {
+                    print((err?.localizedDescription)!)
+                    completion(false)
+                    return
+                }
+                
+                
+                
+                let json = try! JSON(data: data!)
+                
+                let items = json["items"].array!
+                
+                DispatchQueue.main.async {
+                    self.data.removeAll()
+                }
+           
+        
+                if items.isEmpty {
+                    completion(false)
+                } else {
+                    
+                    for i in items {
+                        let id = i["id"].stringValue
+                        
+                        let title = i["volumeInfo"]["title"].stringValue
+                        
+                        //                    let authors = i["volumeInfo"]["authors"].stringValue
+                        
+                        let authors = i["volumeInfo"]["authors"].arrayValue.map { $0.stringValue }
+                        
+                        //                    let authors = i["volumeInfo"]["authors"].array
+                        
+                        var author = ""
+                        
+                        for j in authors {
+                            author += "\(j)"
+                        }
+                        
+                        let description = i["volumeInfo"]["description"].stringValue
+                        
+                        let imurl = i["volumeInfo"]["imageLinks"]["thumbnail"].stringValue
+                        
+                        let url1 = i["webReaderLink"].stringValue
+                        
+                        let pubdate = i["volumeInfo"]["publishedDate"].stringValue
+                        
+                        let formattedDate = self.formatDate(pubdate)
+                        
+                        let subject = i["volumeInfo"]["categories"].stringValue
+                        
+                        let pages = i["volumeInfo"]["pageCount"].stringValue
+                        
+                        let lang = i["volumeInfo"]["language"].stringValue
+                        
+                        DispatchQueue.main.async {
+                            self.data.append(GoogleBook(id: id, title: title, authors: author, desc: description, imurl: imurl, url: url1, date: formattedDate, subject: subject, page: pages, language: lang))
+                        }
+                    }
+                    completion(true)
+                }
+                    
+            }
+            .resume()
+        }
+        
+        func numberOfBooksAvailable() -> Int {
+                return data.count
+        }
+        
+         func formatDate(_ dateString: String) -> String {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd" // Assuming input date format from API
+                guard let date = dateFormatter.date(from: dateString) else {
+                    return dateString // Return original string if date conversion fails
+                }
+                
+                // Convert date to US date format
+                let usDateFormatter = DateFormatter()
+                usDateFormatter.dateFormat = "MM/dd/yyyy"
+                
+                return usDateFormatter.string(from: date)
+        }
+    }
+    
+    struct GoogleBook: Identifiable {
+        var id: String
+        var title: String
+        var authors: String
+        var desc: String
+        var imurl: String
+        var url: String
+        var date: String
+        var subject: String
+        var page: String
+        var language: String
+      
+    }
+    
+    struct GoogleBookWebPage: UIViewRepresentable {
+        var url: String
+        
+        func makeUIView(context: UIViewRepresentableContext<GoogleBookWebPage>) -> WKWebView{
+            
+            let view = WKWebView()
+            view.load(URLRequest(url: URL(string: url)!))
+            return view
+        }
+        
+        func updateUIView(_ uiView: WKWebView, context:  UIViewRepresentableContext<GoogleBookWebPage>) {
+                
+            }
+        }
+    }
 
-}
+
 
 
 #Preview("English") {
     ContentView()
+        
 
         
         

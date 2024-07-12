@@ -10,22 +10,27 @@ import SwiftData
 
 @main
 struct TextbookStoreApp: App {
-//    var sharedModelContainer: ModelContainer = {
-//        let schema = Schema([
-//            Item.self,
-//        ])
-//        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-//
-//        do {
-//            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-//        } catch {
-//            fatalError("Could not create ModelContainer: \(error)")
-//        }
-//    }()
 
+    @StateObject private var tracker = ScreenTimeTracker()
+        
+    @Environment(\.scenePhase) private var scenePhase
+    
     var body: some Scene {
         WindowGroup {
             Home()
+                .environmentObject(tracker)
+                .onChange(of: scenePhase) { newPhase in
+                                    switch newPhase {
+                                    case .active:
+                                        tracker.startTracking()
+                                    case .background:
+                                        tracker.stopTracking()
+                                    default:
+                                        break
+                        }
+                    }
+               
+              
         }
 //        .modelContainer(sharedModelContainer)
     }

@@ -15,6 +15,19 @@ struct Add: View {
     
     @State private var authors = [String]()
     
+    let allSubjets = [
+        
+         "Math",
+         "Science",
+         "English",
+         "Art - Humanity",
+         "History",
+         "Other"
+    
+    ]
+    
+    @State var selectedSubject = "Other"
+    
     var body: some View {
         
         ScrollView(.vertical) {
@@ -113,6 +126,21 @@ struct Add: View {
                         .padding(.vertical)
                     
                     
+                    Section("Subject") {
+                        
+                        Picker("Choose a subject", selection: $selectedSubject) {
+                            ForEach(allSubjets, id: \.self) { subject in
+                                Text("\(subject)")
+                                
+                            }
+                        }
+                            
+                        
+                    }
+                    .foregroundColor(.gray)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    
                     
                     Button(action: {
                         
@@ -161,20 +189,7 @@ struct Add: View {
         )
     }
     
-     private func addBook() {
-            withAnimation {
-                let newBook = Book(title: "Prinplces of enginer", subject: "Math", authors:  ["Sam GoodsBugr"], pdf: "", image: Image(systemName: "book.pages.fill"))
-                //modelContext.insert(newBook)
-            }
-        }
-
-        private func deleteBook(offsets: IndexSet) {
-            withAnimation {
-                for index in offsets {
-                  
-                }
-            }
-        }
+    
     
     private func verifyLink() {
            // Basic validation, you can customize it based on your requirements

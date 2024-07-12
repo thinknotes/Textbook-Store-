@@ -11,9 +11,6 @@
         }
       }
     },
-    "# of Books: " : {
-
-    },
     "%@" : {
       "localizations" : {
         "de" : {
@@ -25,6 +22,7 @@
       }
     },
     "%@ Textbooks" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -44,7 +42,7 @@
         }
       }
     },
-    "1 day Ago" : {
+    "%lld  Books Available " : {
 
     },
     "Add" : {
@@ -63,6 +61,9 @@
     "Add another author" : {
 
     },
+    "Add Bookmark" : {
+
+    },
     "Add new files" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -73,6 +74,12 @@
           }
         }
       }
+    },
+    "Added: %@" : {
+
+    },
+    "Amazon" : {
+
     },
     "Art - Humanity" : {
       "extractionState" : "manual",
@@ -85,10 +92,25 @@
         }
       }
     },
+    "Art Textbooks" : {
+
+    },
     "Author" : {
 
     },
+    "Author: %@" : {
+
+    },
     "Barcode" : {
+
+    },
+    "Book Has Been Bookmarked" : {
+
+    },
+    "Book Name" : {
+
+    },
+    "Book Recomandation" : {
 
     },
     "Book title" : {
@@ -101,7 +123,23 @@
         }
       }
     },
+    "Bookmark Added" : {
+
+    },
+    "Bookmark Already Exists" : {
+
+    },
+    "Bookmark Books" : {
+
+    },
+    "Bookmark Help" : {
+
+    },
+    "Bookmarks" : {
+
+    },
     "By %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -154,7 +192,29 @@
     "Clear" : {
 
     },
+    "Continue Reading" : {
+
+    },
+    "Create custom bookmarks" : {
+
+    },
     "Database Search" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenbank-Suche"
+          }
+        }
+      }
+    },
+    "Date" : {
+
+    },
+    "Date Published" : {
+
+    },
+    "Delete" : {
 
     },
     "Description: " : {
@@ -167,6 +227,9 @@
         }
       }
     },
+    "Dismiss" : {
+
+    },
     "Dont worry we  have %lld books... and counting!" : {
       "localizations" : {
         "de" : {
@@ -178,6 +241,7 @@
       }
     },
     "Download %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -186,6 +250,9 @@
           }
         }
       }
+    },
+    "Edit" : {
+
     },
     "English" : {
       "extractionState" : "manual",
@@ -197,6 +264,9 @@
           }
         }
       }
+    },
+    "English Textbooks" : {
+
     },
     "Enter Link" : {
       "extractionState" : "stale",
@@ -229,6 +299,15 @@
         }
       }
     },
+    "Get Started" : {
+
+    },
+    "Google Books" : {
+
+    },
+    "Grad Tracker" : {
+
+    },
     "Hi, Student!" : {
       "localizations" : {
         "de" : {
@@ -249,6 +328,15 @@
           }
         }
       }
+    },
+    "History Textbooks" : {
+
+    },
+    "I am graduting: " : {
+
+    },
+    "I am studying: " : {
+
     },
     "Import from URL" : {
       "extractionState" : "stale",
@@ -271,6 +359,9 @@
         }
       }
     },
+    "Learn More" : {
+
+    },
     "Math" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -282,6 +373,15 @@
         }
       }
     },
+    "Math Textbooks" : {
+
+    },
+    "Name" : {
+
+    },
+    "Name was not saved" : {
+
+    },
     "Name your File" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -292,6 +392,15 @@
           }
         }
       }
+    },
+    "New Bookmark" : {
+
+    },
+    "Next" : {
+
+    },
+    "No Bookmarks" : {
+
     },
     "No decription could be found" : {
       "localizations" : {
@@ -326,6 +435,9 @@
         }
       }
     },
+    "Options" : {
+
+    },
     "OR" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -359,6 +471,7 @@
       }
     },
     "PDF" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -369,6 +482,9 @@
       }
     },
     "Please provide access to the camera in the settings" : {
+
+    },
+    "Powered by AI" : {
 
     },
     "Rating" : {
@@ -382,6 +498,12 @@
       }
     },
     "Requesting camera access" : {
+
+    },
+    "Save" : {
+
+    },
+    "Save Name" : {
 
     },
     "Scan multiple" : {
@@ -404,7 +526,10 @@
         }
       }
     },
-    "Search textbook, authors, people" : {
+    "Science Textbooks" : {
+
+    },
+    "Search textbooks, authors, subject" : {
 
     },
     "Select an item" : {
@@ -416,6 +541,15 @@
           }
         }
       }
+    },
+    "Since Your Are Studying: %@" : {
+
+    },
+    "Skip" : {
+
+    },
+    "Start adding bookmarks to see your list" : {
+
     },
     "Still need help?" : {
       "localizations" : {
@@ -437,6 +571,18 @@
         }
       }
     },
+    "Subscrible" : {
+
+    },
+    "Switch to EU Format" : {
+
+    },
+    "Switch to US Format" : {
+
+    },
+    "T+" : {
+
+    },
     "Text" : {
 
     },
@@ -444,6 +590,12 @@
 
     },
     "Textbook" : {
+
+    },
+    "The bookmark indicate the book has been bookmarked successfully.  " : {
+
+    },
+    "The bookmark indicates that this \n book has not been \nbookmarked yet. " : {
 
     },
     "The file which you are uploading should be less than 2MB." : {
@@ -467,10 +619,17 @@
         }
       }
     },
+    "This bookmark is already in your list." : {
+
+    },
     "Title" : {
 
     },
+    "To view bookmark go to the home page and click the button next to hello student." : {
+
+    },
     "Type to filter" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -494,6 +653,9 @@
     "Unkown" : {
 
     },
+    "Unlock full access and more with Textbook Plus" : {
+
+    },
     "Upload" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -512,6 +674,24 @@
 
     },
     "View Book" : {
+
+    },
+    "View bookmarks in the homepage under bookmarks" : {
+
+    },
+    "View in webpage" : {
+
+    },
+    "Welcom Back, %@!" : {
+
+    },
+    "Welcome %@" : {
+
+    },
+    "What is your name?" : {
+
+    },
+    "Where glad to have you here. With Grad Tracker you can find textbooks based on your major with the help of AI." : {
 
     },
     "Your device doesn't have a camera" : {

@@ -13,6 +13,7 @@ enum Tabs: String, CaseIterable {
     case book
     case plus
     case dollarsign
+    case gear
 }
 
 enum Pages: Hashable {
@@ -20,6 +21,7 @@ enum Pages: Hashable {
     case book
     case plus
     case dollarsign
+    case settings
 }
 
 struct Tabbar: View {
@@ -45,6 +47,9 @@ struct Tabbar: View {
             return .red
         case .dollarsign:
             return .green
+        
+        case .gear:
+            return .orange
         }
     }
     
